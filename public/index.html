@@ -44,7 +44,35 @@
 				color: white;
 				z-index: 999999;
 			}
-	</style>
+		</style>
+
+		<script type="text/javascript">
+			var options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			};
+
+			function success(pos) {
+				var crd = pos.coords;
+
+				console.log('Your current position is:');
+				console.log(`Latitude : ${crd.latitude}`);
+				console.log(`Longitude: ${crd.longitude}`);
+				console.log(`More or less ${crd.accuracy} meters.`);
+
+				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
+			}
+
+			function error(err) {
+				console.warn(`ERROR(${err.code}): ${err.message}`);
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				navigator.geolocation.getCurrentPosition(success, error, options);
+			});
+			
+		</script>
 	</head>
 	<body style="margin: 0; overflow: hidden;">
 		<a-scene
@@ -62,6 +90,7 @@
 		</a-scene>
 		<div class="centered">
 			<button data-action="change"></button>
+			<div id="cur_loc"></div>
 		</div>
 	</body>
 </html>
