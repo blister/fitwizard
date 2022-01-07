@@ -1,0 +1,8 @@
+- ~~install mysql~~
+- set up database
+- build table schema
+- figure out workout/spell logic
+- scoring?
+- walking tracker?
+- ~~setup heroku~~
+- AR.js
