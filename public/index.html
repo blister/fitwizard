@@ -1,34 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>GeoAR.js demo</title>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>FitWizard</title>
+		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+		<script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+	
+		<style type="text/css">
+			.centered {
+				height: 20%;
+				justify-content: center;
+				position: fixed;
+				bottom: 0%;
+				display: flex;
+				flex-direction: row;
+				width: 100%;
+				margin: 0px auto;
+				left: 0;
+				right: 0;
+			}
 
-  <body style="margin: 0; overflow: hidden;">
-    <a-scene
-      vr-mode-ui="enabled: false"
-      embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-    >
-      <a-text
-        value="A donut approaches, arm yourself!"
-        look-at="[gps-camera]"
-        scale="10 10 10"
-        gps-entity-place="latitude: 33.479827; longitude: -81.970063;"
-      ></a-text>
-      <a-text
-        value="Keep walking, fatty!"
-        look-at="[gps-camera]"
-        scale="10 10 10"
-        gps-entity-place="latitude: 33.479823; longitude: -81.970061;"
-      ></a-text>
-      <a-camera gps-camera rotation-reader> </a-camera>
-    </a-scene>
-  </body>
+			button {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 2px solid white;
+				background-color: transparent;
+				width: 2em;
+				height: 2em;
+				border-radius: 100%;
+				font-size: 2em;
+				background-color: rgba(0, 0, 0, 0.4);
+				color: white;
+				outline: none;
+			}
+
+			.instructions {
+				position: fixed;
+				top: 5%;
+				font-size: 1.25em;
+				color: white;
+				z-index: 999999;
+			}
+	</style>
+	</head>
+	<body style="margin: 0; overflow: hidden;">
+		<a-scene
+			vr-mode-ui="enabled: false"
+			embedded
+			arjs="sourceType: webcam; debugUIEnabled: false;"
+		>
+			<a-text
+				value="Keep walking, fatty!"
+				look-at="[gps-camera]"
+				scale="10 10 10"
+				gps-entity-place="latitude: 33.479823; longitude: -81.970061;"
+			></a-text>
+			<a-camera gps-camera rotation-reader> </a-camera>
+		</a-scene>
+		<div class="centered">
+			<button data-action="change"></button>
+		</div>
+	</body>
 </html>
 <!-- 33.479823, -81.970061 - tch -->
