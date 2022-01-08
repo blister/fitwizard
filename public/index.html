@@ -67,8 +67,13 @@
 			#fireball {
 				display: none;
 				top: 40%;
-				font-size: 28px;
+				left: 40%;
+				position: absolute;
+				font-size: 36px;
 				font-weight: bold;
+				width: 20%;
+				text-align: center;
+				padding: 10px;
 				background-image: linear-gradient( 160deg, #ff0000, #ec008c );
 				color: yellow;
 				margin: 0 auto;
@@ -171,7 +176,6 @@
 			};
 			
 			function haversine(lat1, lon1, lat2, lon2) {
-			
 				var R = 6371 * 3281; // km 
 				//has a problem with the .toRad() method below.
 				var x1 = lat2-lat1;
@@ -190,7 +194,7 @@
 		</script>
 	</head>
 	<body style="margin: 0; overflow: hidden;">
-		<div id="fireball">FIREBALL!</div>
+		<div class="container"><div id="fireball">FIREBALL!</div></div>
 		<a-scene
 			vr-mode-ui="enabled: false"
 			embedded
