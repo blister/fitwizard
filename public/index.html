@@ -23,7 +23,7 @@
 			}
 
 			.centered-top {
-				height: 30%;
+				height: 15%;
 				justify-content: center;
 				position: fixed;
 				top: 0%;
@@ -35,6 +35,10 @@
 				right: 0;
 				background-color: rgba(0,0,0,.5);
 				color: #fff;
+			}
+
+			.centered-top div {
+				margin: 0 auto;
 			}
 
 			button {
@@ -124,7 +128,7 @@
 			
 			function haversine(lat1, lon1, lat2, lon2) {
 			
-				var R = 6371; // km 
+				var R = 6371 * 3281; // km 
 				//has a problem with the .toRad() method below.
 				var x1 = lat2-lat1;
 				var dLat = x1.toRad();  
@@ -154,7 +158,7 @@
 			<a-camera gps-camera rotation-reader> </a-camera>
 		</a-scene>
 		<div class="centered">
-			<button data-action="change"></button>
+			<button id="cast_spell" data-action="change"></button>
 		</div>
 		<div class="centered-top">
 			<div id="start_loc"></div>
