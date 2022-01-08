@@ -5,4 +5,4 @@
 - scoring?
 - walking tracker?
 - ~~setup heroku~~
-- AR.js
+- ~~AR.js~~
