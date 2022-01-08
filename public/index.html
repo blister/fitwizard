@@ -47,6 +47,15 @@
 		</style>
 
 		<script type="text/javascript">
+			let start = {
+				lat: 0,
+				lng: 0
+			};
+			let cur = {
+				lat: 0,
+				lng: 0
+			};
+
 			var options = {
 				enableHighAccuracy: true,
 				timeout: 5000,
@@ -61,7 +70,20 @@
 				console.log(`Longitude: ${crd.longitude}`);
 				console.log(`More or less ${crd.accuracy} meters.`);
 
+				start.lat = crd.latitude;
+				start.lng = crd.longitude;
+
+				document.getElementById('start_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
+			}
+
+			function updateDist(pos) {
+				var crd = pos.coords;
+
+				cur.lat = crd.latitude;
+				cur.lng = crd.longitude;
+
 				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
+				document.getElementById('dist').innerHTML = haversine(start.lat, start.lng, cur.lat, cur.lng);
 			}
 
 			function error(err) {
@@ -70,8 +92,31 @@
 
 			document.addEventListener('DOMContentLoaded', function() {
 				navigator.geolocation.getCurrentPosition(success, error, options);
+
+				setInterval(function() {
+					navigator.geolocation.getCurrentPosition(updateDist, error, options);
+				}, 5000);
 			});
+
+			Number.prototype.toRad = function() {
+				return this * Math.PI / 180;
+			};
 			
+			function haversine(lat1, lon1, lat2, lon2) {
+			
+				var R = 6371; // km 
+				//has a problem with the .toRad() method below.
+				var x1 = lat2-lat1;
+				var dLat = x1.toRad();  
+				var x2 = lon2-lon1;
+				var dLon = x2.toRad();  
+				var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+								Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+								Math.sin(dLon/2) * Math.sin(dLon/2);  
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+				var d = R * c;
+				return d; 
+			}
 		</script>
 	</head>
 	<body style="margin: 0; overflow: hidden;">
@@ -90,6 +135,10 @@
 		</a-scene>
 		<div class="centered">
 			<button data-action="change"></button>
+			
+		</div>
+		<div class="centered">
+			<div id="start_loc"></div>
 			<div id="cur_loc"></div>
 		</div>
 	</body>
