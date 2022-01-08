@@ -22,6 +22,21 @@
 				right: 0;
 			}
 
+			.centered-top {
+				height: 30%;
+				justify-content: center;
+				position: fixed;
+				top: 0%;
+				display: flex;
+				flex-direction: row;
+				width: 100%;
+				margin: 0px auto;
+				left: 0;
+				right: 0;
+				background-color: rgba(0,0,0,.5);
+				color: #fff;
+			}
+
 			button {
 				display: flex;
 				align-items: center;
@@ -135,9 +150,8 @@
 		</a-scene>
 		<div class="centered">
 			<button data-action="change"></button>
-			
 		</div>
-		<div class="centered">
+		<div class="centered-top">
 			<div id="start_loc"></div>
 			<div id="cur_loc"></div>
 			<div id="dist"></div>
