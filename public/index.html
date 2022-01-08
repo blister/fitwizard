@@ -70,6 +70,10 @@
 				lat: 0,
 				lng: 0
 			};
+			let last = {
+				lat: 0,
+				lng: 0,
+			};
 			let cur = {
 				lat: 0,
 				lng: 0
@@ -91,8 +95,8 @@
 				console.log(`Longitude: ${crd.longitude}`);
 				console.log(`More or less ${crd.accuracy} meters.`);
 
-				start.lat = crd.latitude;
-				start.lng = crd.longitude;
+				last.lat = crd.latitude;
+				last.lng = crd.longitude;
 
 				document.getElementById('start_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
 			}
@@ -102,9 +106,12 @@
 
 				cur.lat = crd.latitude;
 				cur.lng = crd.longitude;
-				let cur_dist = haversine(start.lat, start.lng, cur.lat, cur.lng);
+				let cur_dist = haversine(last.lat, last.lng, cur.lat, cur.lng);
 
-				dist = dist + cur_dist;
+				dist = Math.round(dist + cur_dist);
+
+				// store our last distance
+				last = cur;
 
 				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
 				document.getElementById('dist_val').innerHTML = cur_dist;
