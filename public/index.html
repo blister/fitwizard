@@ -117,14 +117,15 @@
 				cur.lat = crd.latitude;
 				cur.lng = crd.longitude;
 				let cur_dist = haversine(last.lat, last.lng, cur.lat, cur.lng);
-
+				dist = Math.round(dist + cur_dist);
 				if ( dist > 100 ) {
+					dist = 100;
+				}
+				if ( dist >= 100 ) {
 					document.getElementById('dist_val').innerHTML = '100';
 					document.getElementById('cast_spell').classList.add('glowButton');
 					document.getElementById('cast_spell').innerHTML = 'cast';
-				} else {
-					dist = Math.round(dist + cur_dist);
-				}
+				} 
 
 				// store our last distance
 				last.lat = cur.lat;
