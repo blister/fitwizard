@@ -111,10 +111,11 @@
 				dist = Math.round(dist + cur_dist);
 
 				// store our last distance
-				last = cur;
+				last.lat = cur.lat;
+				last.lng = cur.lng;
 
 				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
-				document.getElementById('dist_val').innerHTML = cur_dist;
+				document.getElementById('dist_val').innerHTML = dist;
 			}
 
 			function error(err) {
