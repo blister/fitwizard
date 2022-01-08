@@ -64,6 +64,16 @@
 				z-index: 999999;
 			}
 
+			#fireball {
+				display: none;
+				top: 40%;
+				font-size: 28px;
+				font-weight: bold;
+				background-image: linear-gradient( 160deg, #ff0000, #ec008c );
+				color: yellow;
+				margin: 0 auto;
+			}
+
 			/*
 			$spotOne: #26115a;
 			$spotTwo: #ec008c;
@@ -145,6 +155,15 @@
 				setInterval(function() {
 					navigator.geolocation.getCurrentPosition(updateDist, error, options);
 				}, 5000);
+
+				document.getElementById('cast_spell').addEventListener('click', function(e) {
+					dist = 0;
+					document.getElementById('cast_spell').classList.remove('glowButton');
+					document.getElementById('dist_val').innerHTML = '0';
+					document.getElementById('spells').innerHTML = ++spells;
+					document.getElementByid('fireball').style.display = 'block';
+					setTimeout(() => document.getElementById('fireball').style.display = 'none', 1000);
+				});
 			});
 
 			Number.prototype.toRad = function() {
@@ -167,15 +186,11 @@
 				return d; 
 			}
 
-			document.getElementById('cast_spell').addEventListener('click', function(e) {
-				dist = 0;
-				document.getElementById('cast_spell').classList.remove('glowButton');
-				document.getElementById('dist_val').innerHTML = '0';
-				document.getElementById('spells').innerHTML = ++spells;
-			});
+			
 		</script>
 	</head>
 	<body style="margin: 0; overflow: hidden;">
+		<div id="fireball">FIREBALL!</div>
 		<a-scene
 			vr-mode-ui="enabled: false"
 			embedded
