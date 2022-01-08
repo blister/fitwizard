@@ -71,6 +71,8 @@
 				lng: 0
 			};
 
+			let dist = 0;
+
 			var options = {
 				enableHighAccuracy: true,
 				timeout: 5000,
@@ -96,9 +98,12 @@
 
 				cur.lat = crd.latitude;
 				cur.lng = crd.longitude;
+				let cur_dist = haversine(start.lat, start.lng, cur.lat, cur.lng);
+
+				dist = dist + cur_dist;
 
 				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
-				document.getElementById('dist').innerHTML = haversine(start.lat, start.lng, cur.lat, cur.lng);
+				document.getElementById('dist_val').innerHTML = cur_dist;
 			}
 
 			function error(err) {
@@ -154,7 +159,7 @@
 		<div class="centered-top">
 			<div id="start_loc"></div>
 			<div id="cur_loc"></div>
-			<div id="dist"></div>
+			<div id="dist">Mana: <strong id="dist_val"></strong></div>
 		</div>
 	</body>
 </html>
