@@ -70,30 +70,7 @@
 			$spotThree: #ff0000;
 			*/
 			.glowButton {
-				position: relative;
-				margin: auto;
-				padding-right: 1.5rem;
-				padding-left: 1.5rem;
-				font-size: 1rem;
-				line-height: 3rem;
-				text-decoration: none;
-				color: white;
-				text-transform: uppercase;
-				letter-spacing: 2px;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
 				background-image: linear-gradient( 160deg, #ff0000, #ec008c );
-				border-radius: 30px;
-				cursor: pointer;
-				user-select: none;
-				box-shadow: 
-					0 0 0 0 #ec008c,
-					0.5rem 0.5rem 30px mix(black, #26115a, 50%);
-				transition: box-shadow 0.6s;
-				box-shadow: 
-					0 0 60px 2px #ec008c,
-					0.5rem 0.5rem 30px mix(black, #26115a, 50%);
-				
 			}
 		</style>
 
@@ -112,6 +89,7 @@
 			};
 
 			let dist = 0;
+			let spells = 0;
 
 			var options = {
 				enableHighAccuracy: true,
@@ -130,7 +108,7 @@
 				last.lat = crd.latitude;
 				last.lng = crd.longitude;
 
-				document.getElementById('start_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
+				document.getElementById('cur_loc').innerHTML = `${crd.latitude}, ${crd.longitude}`;
 			}
 
 			function updateDist(pos) {
@@ -187,6 +165,13 @@
 				var d = R * c;
 				return d; 
 			}
+
+			document.getElementById('cast_spell').addEventListener('click', function(e) {
+				dist = 0;
+				document.getElementById('cast_spell').classList.remove('glowButton');
+				document.getElementById('dist_val').innerHTML = '0';
+				document.getElementById('spells').innerHTML = ++spells;
+			});
 		</script>
 	</head>
 	<body style="margin: 0; overflow: hidden;">
@@ -207,9 +192,9 @@
 			<button id="cast_spell" data-action="change"></button>
 		</div>
 		<div class="centered-top">
-			<div id="start_loc"></div>
 			<div id="cur_loc"></div>
 			<div id="dist">Mana: <strong id="dist_val"></strong></div>
+			<div id="spells"></div>
 		</div>
 	</body>
 </html>
