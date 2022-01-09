@@ -2,6 +2,20 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+	host     : process.env.DB_HOST,
+	user     : process.env.DB_USER,
+	password : process.env.DB_PASS,
+	database : process.env.DB_SCHEMA,
+	port     : process.env.DB_PORT
+});
+connection.connect();
+
+// temp fake user id for now
+let user_id = 1;
+
 const queryString = require('query-string');
 
 const googleConfig = {
@@ -11,6 +25,7 @@ const googleConfig = {
 }
 
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 
@@ -79,5 +94,13 @@ app.get('/vibration', (req, res) => {
 
 	return res.json({'buzz': false });
 });
+
+/* api endpoints for playing the game */
+app.post('/adventure', (req, res) => {
+	let coords = 'POINT('
+	connection.query('INSERT INTO adventures (`user_id`, `status`, `mode`, `coords`) VALUES (?, ?, ?, ?)', )
+});
+
+
 
 app.listen(process.env.PORT || 3000);
