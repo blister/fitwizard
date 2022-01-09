@@ -1,7 +1,10 @@
 CREATE TABLE users (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
-    `display_name` VARCHAR(100) NOT NULL,
+    `username` VARCHAR(100) NOT NULL,
+	`password` VARCHAR(200) NOT NULL DEFAULT '',
+	`admin` TINYINT(1) NOT NULL DEFAULT 0,
+	`developer` TINYINT(1) NOT NULL DEFAULT 0,
     PRIMARY KEY(`id`)
 ) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
 
