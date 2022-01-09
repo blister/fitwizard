@@ -100,9 +100,17 @@ app.get('/authenticate/google', (req, res) => {
 	res.json(urlParams);
 });
 
-app.get('/login', (req, res) => {
-	let url = urlGoogle();
-	return res.render('login', { google_login_url: url });
+// app.get('/login', (req, res) => {
+// 	let url = urlGoogle();
+// 	return res.render('login', { google_login_url: url });
+// });
+
+app.get('/', (req, res) => {
+	if ( req.session.loggedIn ) {
+		res.render('dashboard');
+	} else {
+		res.redirect('/login');
+	}
 });
 
 app.get('/test', (req, res) => {
@@ -151,6 +159,10 @@ app.post('/signup', async (req, res) => {
 	}
 });
 
+app.get('/login', (req, res) => {
+	res.render('login');
+});
+
 // authenticate
 app.post('/login', async (req, res) => {
 	let loginEmail = `${req.body.email}`
@@ -184,7 +196,16 @@ app.post('/login', async (req, res) => {
 /* api endpoints for playing the game */
 app.post('/adventure', (req, res) => {
 	let coords = 'POINT('
-	connection.query('INSERT INTO adventures (`user_id`, `status`, `mode`, `coords`) VALUES (?, ?, ?, ?)', )
+	connection.query(
+		'INSERT INTO adventures (`user_id`, `status`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
+		[ req.session.user_id, 'active', 'exploring', req.body.lat, req.body.lng ],
+		(err, results) => {
+			return res.redirect('/adventure/' + results.insertId);
+	});
+});
+
+app.get('/adventure/:adventure_id', (req, res) => {
+	res.send(req.params.adventure_id);
 });
 
 
