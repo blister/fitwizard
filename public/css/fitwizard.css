@@ -1,0 +1,20 @@
+@font-face {
+	font-family: Dumbledor;
+	src: url('/fonts/dum1/dum1.ttf') format('truetype');
+}
+@font-face {
+	font-family: DumbledorShadow;
+	src: url('/fonts/dum1/dum1shad.ttf') format('truetype');
+}
+
+body {
+	background-color: mediumseagreen;
+	color: #000;
+	font-family: 'Dumbledor', serif;
+	margin: 0;
+	padding: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: 'DumbledorShadow', serif;
+}

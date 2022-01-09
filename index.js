@@ -9,4 +9,12 @@ app.get('/test', (req, res) => {
     res.send('got it');
 });
 
+app.get('/vibration', (req, res) => {
+	if ( Math.random() >= .5 ) {
+		return res.json({'buzz': true });
+	} 
+
+	return res.json({'buzz': false });
+});
+
 app.listen(process.env.PORT || 3000);
