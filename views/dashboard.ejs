@@ -9,13 +9,16 @@
 	<script type="text/javascript" src="/js/fitwizard.js" defer></script>
 </head>
 <body>
-	<h1>Embark</h1>
+	<h1>Hello Wizard!</h1>
+	<%- include('beta') %>
 	<div class="container">
-		<form id="start_adventure" action="/adventure" method="POST">
-			<input type="hidden" name="lat" id="lat" value="">
-			<input type="hidden" name="lng" id="lng" value="">
-			<input type="submit" value="Embark!">
-		</form>
+		<div style="position:relative;top:20vh;">
+			<form id="start_adventure" action="/adventure" method="POST">
+				<input type="hidden" name="lat" id="lat" value="">
+				<input type="hidden" name="lng" id="lng" value="">
+				<input type="submit" value="Embark!">
+			</form>
+		</div>
 	</div>
 </body>
 </html>

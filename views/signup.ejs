@@ -9,6 +9,7 @@
 </head>
 <body>
 	<h1>Begin your Adventure</h1>
+	<%- include('beta') %>
 	<div class="container">
 		<form action="/signup" method="POST">
 			<label for="email">Email:</label><br>
@@ -23,7 +24,8 @@
 			<label for="verify_password">Verify Password:</label><br>
 			<input type="password" name="verify_password" id="verify_password" placeholder=""><br><br>
 
-			<input type="submit" value="Start Your Adventure!">
+			<input type="submit" value="Start Your Adventure!"><br><br>
+			or <a href="/login">Login</a>
 		</form>
 	</div>
 </body>
