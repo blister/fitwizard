@@ -9,10 +9,8 @@
 	<script type="text/javascript" src="/js/fitwizard.js" defer></script>
 </head>
 <body>
-	<h1>Hello Wizard!</h1>
-	<%- include('beta') %>
 	<div class="container">
-		<div style="position:relative;top:20vh;">
+		<div style="position: absolute; bottom: 10px; width: 98%; box-sizing: border-box;">
 			<form id="start_adventure" action="/adventure" method="POST">
 				<input type="hidden" name="lat" id="lat" value="">
 				<input type="hidden" name="lng" id="lng" value="">

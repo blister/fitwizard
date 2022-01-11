@@ -9,11 +9,14 @@
 
 body {
 	background-color: rgb(49, 49, 49);
-	color: #fff;
+	color: #000;
 	font-family: 'Dumbledor', serif;
 	margin: 0;
 	padding: 0 10px;
 	font-size: 28px;
+	background: url('/images/FitWizard_Welcome.png') no-repeat;
+	background-size: 100vw 100vh;
+	box-sizing: border-box;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -24,6 +27,15 @@ h1,h2,h3,h4,h5,h6 {
 
 .container {
 	margin: 0 10px;
+	position: absolute;
+	bottom: 10px;
+	background-color: rgba(0,0,0,.6);
+	color: #fff;
+	padding: 5px;
+
+	box-sizing: border-box;
+	min-height: 40vh;
+	min-width: 90vw;
 }
 
 input {
@@ -42,7 +54,7 @@ input[type=submit] {
 	border: 1px solid orange;
 	margin: 5px 10px;
 	padding: 0px 10px;
-	background-color: rgba(255,165,0,.1);
+	background-color: rgba(0,0,0,.6);
 }
 
 a {
