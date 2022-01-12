@@ -1,0 +1,31 @@
+<div class="panel panel-left panel-cover">
+	<nav class="list-nav">
+	<ul>
+	<% 
+		if ( ! loggedIn ) {
+	%>
+		<li class="home-icon"><a href="/" class="close-panel">Home</a></li>
+		<li class="about-icon"><a href="#" data-popup=".popup-login" class="open-popup close-panel">Log In</a></li>
+		<!-- <li class="about-icon"><a href="/about.html" class="close-panel">About</a></li> -->
+		<!--<li class="features-icon"><a href="/features.html" class="close-panel">Features</a></li>
+		<li class="photos-icon"><a href="/photos.html" class="close-panel">Gallery</a></li>
+		<li class="video-icon"><a href="/videos.html" class="close-panel">Videos</a></li>
+		<li class="blog-icon"><a href="/blog.html" class="close-panel">Blog</a></li> -->
+		<!-- <li class="contact-icon"><a href="/contact.html" class="close-panel">Contact</a></li> --> 
+	<% 		
+		} else {
+	%>
+		<li class="home-icon"><a href="/" class="close-panel">Home</a></li>
+		<li class="about-icon"><a href="/logout" data-popup=".popup-login" class="open-popup close-panel">Log Out</a></li>
+		<!-- <li class="about-icon"><a href="/about.html" class="close-panel">About</a></li> -->
+		<!--<li class="features-icon"><a href="/features.html" class="close-panel">Features</a></li>
+		<li class="photos-icon"><a href="/photos.html" class="close-panel">Gallery</a></li>
+		<li class="video-icon"><a href="/videos.html" class="close-panel">Videos</a></li>
+		<li class="blog-icon"><a href="/blog.html" class="close-panel">Blog</a></li> -->
+		<!-- <li class="contact-icon"><a href="/contact.html" class="close-panel">Contact</a></li> -->
+	<%		
+		}	
+	%> 
+	</ul>
+	</nav>  
+</div>

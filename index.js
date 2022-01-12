@@ -40,16 +40,26 @@ app.use(session({
 
 app.use((req, res, next) => {
 	if ( req.session.loggedIn ) {
+		res.locals.loggedIn = true;
 		res.locals.user_id = req.session.user_id;
 		res.locals.username = req.session.username;	
 	} else {
 		req.session.loggedIn = false;
+		res.locals.loggedIn = false;
 		res.locals.user_id = null;
 		res.locals.username = 'Guest Wizard';
 	}
 	
 	next();
 });
+
+/**
+ * generate random numbers for stats
+ * 
+ */
+function rand(min, max) {
+	return parseInt(Math.floor(Math.random() * ( max - min + 1) + min));
+}
 
 /**
  * Create the google auth object which gives us access to talk to google's apis.
@@ -107,9 +117,20 @@ app.get('/authenticate/google', (req, res) => {
 
 app.get('/', (req, res) => {
 	if ( req.session.loggedIn ) {
-		res.render('dashboard');
+
+		connection.query(
+			'SELECT xp,strength,dexterity,constitution,intelligence,wisdom FROM char_stats WHERE user_id = ?',
+			req.session.user_id, 
+			(err, results) => {
+				if ( err ) {
+					console.log(err);
+					return res.render('landing');
+				}
+				return res.render('dashboard', { attributes: results[0] });		
+		});
+
 	} else {
-		res.redirect('/login');
+		res.render('landing');
 	}
 });
 
@@ -137,7 +158,7 @@ app.post('/signup', async (req, res) => {
 			let signupUsername = `${req.body.username}`;
 			let signup_verify_email_query = 'SELECT id FROM users WHERE users.email = ? OR users.username = ?';
 			let signup_query = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
-	
+			let char_query = 'INSERT INTO char_stats (user_id, strength, dexterity, constitution, intelligence, wisdom) VALUES (?, ?, ?, ?, ?, ?)';
 			connection.query(signup_verify_email_query, [ signupEmail, signupUsername ], (err, results) => {
 				if ( ! results[0] ) {
 					connection.query(signup_query, [ signupEmail, signupUsername, signupPassword ], (err, results) => {
@@ -145,8 +166,20 @@ app.post('/signup', async (req, res) => {
 						req.session.loggedIn = true;
 						req.session.user_id = results.insertId;
 						req.session.username = signupUsername;
-						console.log(`New signup: ${signupUsername} - ${signupEmail}`);
-						res.redirect('/');
+
+						let str = rand(7,12);
+						let dex = rand(7,14);
+						let con = rand(7,14);
+						let wis = rand(7,12);
+						let intel = rand(10, 18);
+						
+						connection.query(char_query, [req.session.user_id, str, dex, con, wis, intel], (err, results) => {
+							console.log(`New signup: ${signupUsername} - ${signupEmail}`);
+							console.log(`Stats [Str: ${str}, Dex: ${dex}, Con: ${con}, Wis: ${wis}, Int: ${int}]`);
+							res.redirect('/');
+						});
+
+						
 					});
 				} else {
 					res.send('Username or email address already in use.');
@@ -192,10 +225,18 @@ app.post('/login', async (req, res) => {
 	});
 });
 
+app.get('/logout', (req, res) => {
+	if ( req.session ) {
+		req.session.destroy(err => {
+			res.redirect('/');
+		}); 
+	} else {
+		res.redirect('/');
+	}
+});
 
 /* api endpoints for playing the game */
 app.post('/adventure', (req, res) => {
-	let coords = 'POINT('
 	connection.query(
 		'INSERT INTO adventures (`user_id`, `status`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
 		[ req.session.user_id, 'active', 'exploring', req.body.lat, req.body.lng ],
@@ -205,7 +246,7 @@ app.post('/adventure', (req, res) => {
 });
 
 app.get('/adventure/:adventure_id', (req, res) => {
-	res.send(req.params.adventure_id);
+	res.json(req.params);
 });
 
 

@@ -7,13 +7,11 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
 	<link rel="apple-touch-startup-image" href="images/apple-touch-startup-image-320x460.png" />
-	<title>FitWizard - Welcome Wizard</title>
+	<title>FitWizard - Walk into Battle</title>
 	<link rel="stylesheet" href="/css/framework7.css">
 	<link rel="stylesheet" href="/style.css">
 	<link type="text/css" rel="stylesheet" href="/css/swipebox.css" />
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700,900' rel='stylesheet' type='text/css'>
-
-	<script type="text/javascript" src="fitwizard.js" defer></script>
 </head>
 <body id="mobile_wrap">
 
@@ -58,30 +56,23 @@
 		<div class="page-content">
 
 				<!-- Slider -->
-				<div class="swiper-container swiper-init" data-effect="coverflow" data-pagination=".swiper-pagination" data-paginationClickable="true">
+				<div class="swiper-container swiper-init" data-effect="coverflow" data-pagination=".swiper-pagination" data-paginationClickable="true" data-autoplay="3000">
 				<div class="swiper-wrapper">
 				
 					<div class="swiper-slide">
-						<span>EMBARK!</span>
+						<span>BATTLE FOR <br /> FITNESS</span>
 						<span class="subtitle">Walk, run, and kill monsters</span>
-						<a id="start_adventure" href="#" data-popup=".popup-adventure" class="swiper_read_more open-popup">Start Adventure</a>
+						<a href="#" data-popup=".popup-signup" class="swiper_read_more open-popup">Join Today!</a>
 					</div>
 					<div class="swiper-slide">
-						<span>INVENTORY</span>
+						<span>LEVEL <br />UP</span>
 						<span class="subtitle">Earn XP and grow stronger</span>
 						<a href="#" data-popup=".popup-signup" class="swiper_read_more open-popup">Play for Free</a>
 					</div>
 					<div class="swiper-slide">
-						<span>Player Stats</span>
-						<span class="subtitle">Level: 1 [0/100]</span>
-						<ul style="padding: 5px; margin:0 auto;font-size: larger;color: #fff;background-color: #0009;width:70%;text-align:left;">
-							<li>Strength: <strong><%- attributes.strength %></strong></li>
-							<li>Dexterity: <strong><%- attributes.dexterity %></strong></li>
-							<li>Constitution: <strong><%- attributes.constitution %></strong></li>
-							<li>Intelligence: <strong><%- attributes.intelligence %></strong></li>
-							<li>Wisdom: <strong><%- attributes.wisdom %></strong></li>
-							
-						</ul>
+						<span>SAVE <br /> THE WORLD</span>
+						<span class="subtitle">Retrieve the Amulet of Yendor <br>and defeat the dark lord.</span>
+						<a href="#" data-popup=".popup-signup" class="swiper_read_more open-popup">Sign Up Today</a> 
 					</div>
 				</div>
 				<div class="swiper-pagination"></div>
@@ -93,10 +84,10 @@
 	<div class="toolbar">
 			<div class="toolbar-inner">
 			<ul class="toolbar_icons icons_4row">
-			<!-- <li><a href="#" data-popup=".popup-login" class="open-popup"><img src="images/icons/white/user.png" alt="" title="" /></a></li> -->
-			<!-- <li><a href="features.html"><img src="images/icons/white/settings.png" alt="" title="" /></a></li>
+			<li><a href="#" data-popup=".popup-login" class="open-popup"><img src="images/icons/white/user.png" alt="" title="" /></a></li>
+			<li><a href="features.html"><img src="images/icons/white/settings.png" alt="" title="" /></a></li>
 			<li><a href="photos.html"><img src="images/icons/white/photos.png" alt="" title="" /></a></li>
-			<li><a href="#" data-popup=".popup-social" class="open-popup"><img src="images/icons/white/heart.png" alt="" title="" /></a></li> -->
+			<li><a href="#" data-popup=".popup-social" class="open-popup"><img src="images/icons/white/heart.png" alt="" title="" /></a></li>
 			</ul>
 			</div>  
 	</div>
@@ -105,15 +96,46 @@
 	</div>
 	</div>
 
-	
-	<!-- Adventure Popup -->
-	<div class="popup popup-adventure">
+	<!-- About Popup -->
+	<div class="popup popup-login">
 		<div class="content-block">
-		<h4>Adventure!</h4>
-			<div class="adventurePanel">
-				
+		<h4>Login</h4>
+			<div class="loginform">
+				<form id="LoginForm" action="/login" method="post">
+					<label>Email Address:</label>
+					<input type="email" name="email" value="" class="form_input required" />
+					<label>Password:</label>
+					<input type="password" name="password" value="" class="form_input required" />
+					<input type="submit" name="submit" class="form_submit" id="submit" value="Login" />
+				</form>
 			</div>
-			<div class="close_popup_button_gray"><a id="end_adventure" href="#" class="close-popup">End Adventure</a></div>
+			<div class="close_popup_button_gray"><a href="#" class="close-popup">Close</a></div>
+		</div>
+	</div>
+
+	<!-- Signup Popup -->
+	<div class="popup popup-signup">
+		<div class="content-block">
+		<h4>Sign Up</h4>
+			<div class="loginform">
+
+				<form id="SignupForm" method="post">
+					<label for="email">Email:</label>
+					<input type="email" name="email" id="email" placeholder="you@something.com" class="form_input required" autocomplete="new-password">
+
+					<label>Wizard Name:</label>
+					<input type="text" name="username" value="" class="form_input required" autocomplete="new-password" />
+
+					<label>Password:</label>
+					<input type="password" name="password" value="" class="form_input required" autocomplete="new-password" />
+
+					<label>Verify Password:</label>
+					<input type="password" name="verify_password" value="" class="form_input required" autocomplete="new-password" />	
+
+					<input type="submit" name="submit" class="form_submit" id="submit_new_account" value="Create Account" />
+				</form>
+			</div>
+			<div class="close_popup_button_gray"><a href="#" class="close-popup">Close</a></div>
 		</div>
 	</div>
 

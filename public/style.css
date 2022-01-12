@@ -420,7 +420,7 @@ width:14%; margin:0 3%;
 /* 6. PAGES LAYOUT */
 /*===============================================*/	
 .homepage{
-background: url(images/bg.jpg) no-repeat center center;
+background: url(images/FitWizard_Welcome.png) no-repeat center center;
 background-attachment:fixed;
 -webkit-background-size: 100%; 
 -moz-background-size: 100%;
@@ -518,13 +518,15 @@ opacity: 1;
 background: #fff;
 }
 a.swiper_read_more{
-color:#ffca2e;
+color:#ffffff;
 border:1px solid #fff;
 padding:20px 30px;
 text-decoration:none;
 margin:30px 0 0 0;
 display:inline-block;
 font-size:20px;
+background-color: rgba(38, 0, 255, 0.5);
+
 }
 /*===============================================*/
 /* 8. LISTS */
