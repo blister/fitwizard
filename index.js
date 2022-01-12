@@ -241,14 +241,18 @@ app.post('/adventure', (req, res) => {
 		'INSERT INTO adventures (`user_id`, `status`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
 		[ req.session.user_id, 'active', 'exploring', req.body.lat, req.body.lng ],
 		(err, results) => {
-			return res.redirect('/adventure/' + results.insertId);
+			return res.json({ adventure_id: results.insertId });
 	});
 });
 
-app.get('/adventure/:adventure_id', (req, res) => {
-	res.json(req.params);
+app.all('/adventure/:adventure_id', (req, res) => {
+	connection.query(
+		'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
+		[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
+		(err, results) => {
+			// TODO(erh): figure out speed, combat, etc
+			return res.json({ adventure_id: req.params.adventure_id });
+	});
 });
-
-
 
 app.listen(process.env.PORT || 3000);
