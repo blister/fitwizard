@@ -289,13 +289,17 @@ app.all('/adventure/:adventure_id', (req, res) => {
 			'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
 			[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
 			(err, results) => {
-				
+
 				// TODO(erh): figure out speed, combat, etc
 				// check to see if we have encountered a monster
-				if ( adv_results[0].status == 'exploring' ) {
+				if ( adv_results[0].mode == 'exploring' ) {
 
-					let mon_rand = rand(1,100);
-					if ( mon_rand == 20 ) {
+					let mon_rand = rand(1,25);
+
+					// TODO(decrease randomizer the longer we go without a fight)
+					console.log('Random Chance: ' + mon_rand);
+					if ( mon_rand < 5 ) {
+						console.log("Fight!");
 						// we found a monster!
 						let monster = {
 							name: 'orc',
@@ -306,7 +310,7 @@ app.all('/adventure/:adventure_id', (req, res) => {
 						connection.query(create_query, [ req.params.adventure_id, 'active', monster.name, monster.level, monster.hp ], (err, results) => {
 							output['battle'] = monster;
 
-							connection.query('UPDATE adventures SET status = "battle" WHERE id = ?', req.params.adventure_id, (err, results) => {
+							connection.query('UPDATE adventures SET mode = "battle" WHERE id = ?', req.params.adventure_id, (err, results) => {
 								return res.json(output);
 							});
 							
@@ -315,14 +319,21 @@ app.all('/adventure/:adventure_id', (req, res) => {
 						return res.json(output);
 					}
 
+				} else if ( adv_results[0].mode == 'battle' ) {
+					let battle_query = 'SELECT status,monster_name,monster_level,monster_hp FROM adventure_fights WHERE adventure_id = ?';
+					connection.query(battle_query, req.params.adventure_id, (err, results) => {
+						let monster = {
+							name: results[0].monster_name,
+							level: results[0].monster_level,
+							hp: results[0].monster_hp
+						};
+
+						output['battle'] = monster;
+						return res.json(output);
+					});
 				}
 
-
-				return res.json(output);
 		});
-
-		
-
 		
 	});	
 });

@@ -15,7 +15,7 @@ function game_tick() {
 }
 
 function tick_error() {
-	document.getElementById('adventure_panel').innerHTML = 'Tick error';
+	document.getElementById('output_panel').innerHTML = 'Tick error';
 }
 
 function store_tick(pos) {
@@ -25,7 +25,11 @@ function store_tick(pos) {
 	xhr.open('POST', '/adventure/' + adventure_id);
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onload = function() {
-		document.getElementById('adventure_panel').innerHTML = '<pre>' + this.responseText + '</pre>';
+		let json = JSON.parse(this.responseText);
+		if ( 'battle' in json ) {
+			document.getElementById('battle_panel').innerHTML = JSON.stringify(json['battle']);
+		}
+		document.getElementById('output_panel').innerHTML = '<pre>' + this.responseText + '</pre>';
 		console.log('prepping next', gameStatus);
 		if ( gameStatus == 'active' ) {
 			setTimeout(game_tick, 5000);
@@ -41,7 +45,7 @@ function start_adventure(pos) {
 	xhr.open('POST', '/adventure');
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onload = function() {
-		document.getElementById('adventure_panel').innerHTML = 'Adventure started...';
+		document.getElementById('output_panel').innerHTML = 'Adventure started...';
 		let json = JSON.parse(this.responseText);
 		adventure_id = json.adventure_id;
 
@@ -66,7 +70,7 @@ document.getElementById('end_adventure').addEventListener('click', (ev) => {
 	xhr.open('POST', '/adventure/' + adventure_id + '/end');
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onload = function() {
-		document.getElementById('adventure_panel').innerHTML = 'Adventure ended...';
+		document.getElementById('output_panel').innerHTML = 'Adventure ended...';
 		let json = JSON.parse(this.responseText);
 
 		console.log('ending game', gameStatus);
