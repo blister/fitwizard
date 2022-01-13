@@ -273,25 +273,57 @@ app.all('/adventure/:adventure_id', (req, res) => {
 	let output = {adventure_id: req.params.adventure_id};
 
 	let adventure_query = 'SELECT created_on,status,mode,lat,lng FROM adventures WHERE id = ? AND user_id = ?';
-	connection.query(adventure_query, [req.params.adventure_id, req.session.user_id], (err, results) => {
+	connection.query(adventure_query, [req.params.adventure_id, req.session.user_id], (err, adv_results) => {
 		if ( err ) {
 			console.error("DB error:", err);
 			return res.json(output);
 		}
-		output['status'] = results[0].status;
-		output['mode']   = results[0].mode;
-		output['distance'] = getDistance(results[0].lat, results[0].lng, req.body.lat, req.body.lng);
-		output['time'] = (new Date().getTime() - new Date(results[0].created_on).getTime()) / (1000 * 60 * 60);
+		output['status'] = adv_results[0].status;
+		output['mode']   = adv_results[0].mode;
+		output['distance'] = getDistance(adv_results[0].lat, adv_results[0].lng, req.body.lat, req.body.lng);
+		output['time'] = (new Date().getTime() - new Date(adv_results[0].created_on).getTime()) / (1000 * 60 * 60);
 		output['speed'] = output['distance'] / output['time'];
+
 
 		connection.query(
 			'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
 			[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
 			(err, results) => {
+				
 				// TODO(erh): figure out speed, combat, etc
+				// check to see if we have encountered a monster
+				if ( adv_results[0].status == 'exploring' ) {
+
+					let mon_rand = rand(1,100);
+					if ( mon_rand == 20 ) {
+						// we found a monster!
+						let monster = {
+							name: 'orc',
+							level: 2,
+							hp: 15
+						};
+						let create_query = 'INSERT INTO adventure_fights (adventure_id, status, monster_name, monster_level, monster_hp) VALUES (?, ?, ?, ?, ?)';
+						connection.query(create_query, [ req.params.adventure_id, 'active', monster.name, monster.level, monster.hp ], (err, results) => {
+							output['battle'] = monster;
+
+							connection.query('UPDATE adventures SET status = "battle" WHERE id = ?', req.params.adventure_id, (err, results) => {
+								return res.json(output);
+							});
+							
+						});
+					} else {
+						return res.json(output);
+					}
+
+				}
+
+
 				return res.json(output);
 		});
 
+		
+
+		
 	});	
 });
 
