@@ -420,7 +420,7 @@ width:14%; margin:0 3%;
 /* 6. PAGES LAYOUT */
 /*===============================================*/	
 .homepage{
-background: url(images/FitWizard_Welcome.png) no-repeat center center;
+background: url(images/FitWizard_BlankAdventure.png) no-repeat center center;
 background-attachment:fixed;
 -webkit-background-size: 100%; 
 -moz-background-size: 100%;
@@ -525,7 +525,9 @@ text-decoration:none;
 margin:30px 0 0 0;
 display:inline-block;
 font-size:20px;
-background-color: rgba(38, 0, 255, 0.5);
+/*background-color: rgba(38, 0, 255, 0.5);*/
+background-color: #3366FF;
+border-radius:5px;
 
 }
 /*===============================================*/
@@ -1126,7 +1128,7 @@ font-size:20px;
 line-height:20px;
 } 
 a.swiper_read_more{
-color:#ffca2e;
+color:#fff;
 padding:10px 20px;
 margin:30px 0 0 0;
 font-size:14px;
