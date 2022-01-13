@@ -54,6 +54,30 @@ app.use((req, res, next) => {
 });
 
 /**
+ * haversine
+ * @param {*} min 
+ * @param {*} max 
+ * @returns 
+ */
+function getDistance(lat1,lon1,lat2,lon2) {
+	//var R = 6371; // Radius of the earth in km
+	let R = 3958.8; // radius of the earth in miles
+	let dLat = deg2rad(lat2-lat1);  // deg2rad below
+	let dLon = deg2rad(lon2-lon1); 
+	let a = 
+	  Math.sin(dLat/2) * Math.sin(dLat/2) +
+	  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+	  Math.sin(dLon/2) * Math.sin(dLon/2); 
+	let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	let d = R * c; // Distance in km
+	return d;
+}
+
+function deg2rad(deg) {
+	return deg * (Math.PI/180);
+}
+
+/**
  * generate random numbers for stats
  * 
  */
@@ -246,12 +270,37 @@ app.post('/adventure', (req, res) => {
 });
 
 app.all('/adventure/:adventure_id', (req, res) => {
+	let output = {adventure_id: req.params.adventure_id};
+
+	let adventure_query = 'SELECT created_on,status,mode,lat,lng FROM adventures WHERE id = ? AND user_id = ?';
+	connection.query(adventure_query, [req.params.adventure_id, req.session.user_id], (err, results) => {
+		if ( err ) {
+			console.error("DB error:", err);
+			return res.json(output);
+		}
+		output['status'] = results[0].status;
+		output['mode']   = results[0].mode;
+		output['distance'] = getDistance(results[0].lat, results[0].lng, req.body.lat, req.body.lng);
+		output['time'] = (new Date().getTime() - new Date(results[0].created_on).getTime()) / (1000 * 60 * 60);
+		output['speed'] = output['distance'] / output['time'];
+
+		connection.query(
+			'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
+			[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
+			(err, results) => {
+				// TODO(erh): figure out speed, combat, etc
+				return res.json(output);
+		});
+
+	});	
+});
+
+app.all('/adventure/:adventure_id/end', (req, res) => {
 	connection.query(
-		'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
-		[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
+		'UPDATE adventures SET status = "retreated" WHERE id = ?', 
+		[ req.params.adventure_id ],
 		(err, results) => {
-			// TODO(erh): figure out speed, combat, etc
-			return res.json({ adventure_id: req.params.adventure_id });
+			return res.json({ status: "retreated", adventure_id: results.insertId });
 	});
 });
 

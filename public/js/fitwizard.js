@@ -22,7 +22,7 @@ function store_tick(pos) {
 	let coords = pos.coords;
 
 	let xhr = new XMLHttpRequest();
-	xhr.open('POST', '/adventure/1');
+	xhr.open('POST', '/adventure/' + adventure_id);
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onload = function() {
 		document.getElementById('adventure_panel').innerHTML = '<pre>' + this.responseText + '</pre>';
@@ -62,6 +62,16 @@ document.getElementById('start_adventure').addEventListener('click', (ev) => {
 
 document.getElementById('end_adventure').addEventListener('click', (ev) => {
 	gameStatus = 'inactive';
+	let xhr = new XMLHttpRequest();
+	xhr.open('POST', '/adventure/' + adventure_id + '/end');
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.onload = function() {
+		document.getElementById('adventure_panel').innerHTML = 'Adventure ended...';
+		let json = JSON.parse(this.responseText);
+
+		console.log('ending game', gameStatus);
+	}
+	xhr.send(`counter=${counter}`);
 });
 
 
