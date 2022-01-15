@@ -32,6 +32,16 @@ CREATE TABLE adventures (
     PRIMARY KEY(`id`)
 ) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE adventure_fights (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`adventure_id` BIGINT UNSIGNED NOT NULL,
+	`status` VARCHAR(20) NOT NULL DEFAULT 'active',
+	`monster_name` VARCHAR(50) NOT NULL DEFAULT '',
+	`monster_level` INT UNSIGNED NOT NULL DEFAULT 1,
+	`monster_hp` INT UNSIGNED NOT NULL DEFAULT 10,
+	PRIMARY KEY(`id`)
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE adventure_ticks (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `adventure_id` BIGINT UNSIGNED NOT NULL,
