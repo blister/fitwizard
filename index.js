@@ -266,45 +266,51 @@ app.get('/logout', (req, res) => {
 /* api endpoints for playing the game */
 app.post('/adventure', async (req, res) => {
 
-	const output = await game.start(req.session.user_id, req.body.lat, req.body.long);
+	const output = await game.start(req.session.user_id, req.body.lat, req.body.lng);
+	console.log('starting new adventure');
+	console.log(output);
 	return res.json(output);
 });
 
 app.all('/adventure/:adventure_id', async (req, res) => {
-	let adventure_id = req.params.adventure_id;
-	let output = {adventure_id: adventure_id};
-	let current = await game.getCurrent(adventure_id);
-	output['status'] = current.status;
-	output['mode']   = current.mode;
-	output['distance'] = getDistance(current.lat, current.lng, req.body.lat, req.body.lng);
-	output['time'] = (new Date().getTime() - new Date(adv_results[0].created_on).getTime()) / (1000 * 60 * 60);
-	output['speed'] = output['distance'] / output['time'];
+	if ( ! req.session.user_id ) {
+		return res.json({'error': 'You must be logged in'});
+	}
+	try {
+		let user_id = req.session.user_id;
+		let adventure_id = req.params.adventure_id;
+		let output = {adventure_id: adventure_id};
+		let current = await game.getCurrent(adventure_id);
+		let player = await game.player(user_id);
+		output['player'] = player;
+		output['status'] = current.status;
+		output['mode']   = current.mode;
+		output['distance'] = getDistance(current.lat, current.lng, req.body.lat, req.body.lng);
+		output['time'] = (new Date().getTime() - new Date(current.created_on).getTime()) / (1000 * 60 * 60);
+		output['speed'] = output['distance'] / output['time'];
+		
+		let foundMonster = await game.storeTick(adventure_id, user_id, output['mode'], req.body.lat, req.body.lng);
 
-	return res.json(output);
-	let adventure_query = 'SELECT created_on,status,mode,lat,lng FROM adventures WHERE id = ? AND user_id = ?';
-	connection.query(adventure_query, [req.params.adventure_id, req.session.user_id], (err, adv_results) => {
-		if ( err ) {
-			console.error("DB error:", err);
+		if ( output['mode'] == 'exploring' && foundMonster ) {
+			console.log('You have discovered a bad guy! FIGHT!');
+			game.enterBattle(adventure_id);
+			let monster = game.mon(adventure_id, player.level);
+			// TODO(erh) YOU ARE HERE. FIGURE THIS OUT.
+
+			output['mode'] = 'battle';
+			return res.json(output);
+		} else {
 			return res.json(output);
 		}
-		output['status'] = adv_results[0].status;
-		output['mode']   = adv_results[0].mode;
-		output['distance'] = getDistance(adv_results[0].lat, adv_results[0].lng, req.body.lat, req.body.lng);
-		output['time'] = (new Date().getTime() - new Date(adv_results[0].created_on).getTime()) / (1000 * 60 * 60);
-		output['speed'] = output['distance'] / output['time'];
-
-
-		connection.query(
-			'INSERT INTO adventure_ticks (`adventure_id`, `user_id`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
-			[ req.params.adventure_id, req.session.user_id, 'exploring', req.body.lat, req.body.lng ],
-			(err, results) => {
-
+	} catch(error) {
+		console.log(error);
+	}
 				// TODO(erh): figure out speed, combat, etc
 				// check to see if we have encountered a monster
+				/*
 				if ( adv_results[0].mode == 'exploring' ) {
 
 					let mon_rand = rand(1,25);
-
 					// TODO(decrease randomizer the longer we go without a fight)
 					console.log('Random Chance: ' + mon_rand);
 					if ( mon_rand < 5 ) {
@@ -345,6 +351,7 @@ app.all('/adventure/:adventure_id', async (req, res) => {
 		});
 		
 	});	
+	*/
 });
 
 app.all('/adventure/:adventure_id/end', (req, res) => {
