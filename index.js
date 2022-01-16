@@ -8,6 +8,10 @@ const validator = require('email-validator');
 
 const mysql = require('mysql2');
 
+const FWG = require('fitwizardgame');
+
+const game = new FWG(process.env.DB_HOST, process.env.DB_USER, process.env.DB_PASS, process.env.DB_PORT, process.env.DB_SCHEMA);
+
 const connection = mysql.createConnection({
 	host     : process.env.DB_HOST,
 	user     : process.env.DB_USER,
@@ -260,18 +264,23 @@ app.get('/logout', (req, res) => {
 });
 
 /* api endpoints for playing the game */
-app.post('/adventure', (req, res) => {
-	connection.query(
-		'INSERT INTO adventures (`user_id`, `status`, `mode`, `lat`, `lng`) VALUES (?, ?, ?, ?, ?)', 
-		[ req.session.user_id, 'active', 'exploring', req.body.lat, req.body.lng ],
-		(err, results) => {
-			return res.json({ adventure_id: results.insertId });
-	});
+app.post('/adventure', async (req, res) => {
+
+	const output = await game.start(req.session.user_id, req.body.lat, req.body.long);
+	return res.json(output);
 });
 
-app.all('/adventure/:adventure_id', (req, res) => {
-	let output = {adventure_id: req.params.adventure_id};
+app.all('/adventure/:adventure_id', async (req, res) => {
+	let adventure_id = req.params.adventure_id;
+	let output = {adventure_id: adventure_id};
+	let current = await game.getCurrent(adventure_id);
+	output['status'] = current.status;
+	output['mode']   = current.mode;
+	output['distance'] = getDistance(current.lat, current.lng, req.body.lat, req.body.lng);
+	output['time'] = (new Date().getTime() - new Date(adv_results[0].created_on).getTime()) / (1000 * 60 * 60);
+	output['speed'] = output['distance'] / output['time'];
 
+	return res.json(output);
 	let adventure_query = 'SELECT created_on,status,mode,lat,lng FROM adventures WHERE id = ? AND user_id = ?';
 	connection.query(adventure_query, [req.params.adventure_id, req.session.user_id], (err, adv_results) => {
 		if ( err ) {

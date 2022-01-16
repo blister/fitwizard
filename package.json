@@ -25,6 +25,7 @@
     "email-validator": "^2.0.4",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
+    "fitwizardgame": "github:blister/FitWizardGame",
     "googleapis": "^92.0.0",
     "mysql2": "^2.3.3",
     "query-string": "^7.1.0"
